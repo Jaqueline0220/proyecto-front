@@ -1,0 +1,21 @@
+{
+  "trailingComma": "all",
+  "semi": true,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "endOfLine": "auto",
+  "bracketSameLine": true,
+  "overrides": [
+    {
+      "files": "*.css",
+      "options": {
+        "useTabs": true,
+        "singleQuote": false,
+        "tabWidth": 4
+      }
+    }
+  ]
+}
