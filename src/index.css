@@ -1,0 +1,15 @@
+*:focus {
+  outline: none !important;
+}
+.bg-secondary {
+  --tw-bg-opacity: 1;
+  background-color: #8bb0e8 !important;
+}
+
+.iconoCerrar{
+  position: absolute;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

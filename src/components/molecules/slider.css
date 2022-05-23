@@ -1,0 +1,16 @@
+/* Spline */
+.splide__pagination {
+	bottom: unset;
+	left: 0;
+	right: unset;
+	top: 1em;
+}
+
+.splide__track {
+	height: 100% !important;
+	border-radius: 10px;
+}
+
+.splide__slide {
+	height: 100% !important;
+}
