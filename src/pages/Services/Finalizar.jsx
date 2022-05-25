@@ -5,7 +5,6 @@ import { MBox } from 'components/molecules/MBox';
 import { getServicesByUser } from 'store/servicioReducer';
 import { Abutton } from 'components/atoms/AButton';
 import { useParams } from 'react-router-dom';
-import { MInput } from 'components/molecules/forms/MInput';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { string, object } from 'yup';
@@ -15,11 +14,12 @@ const FinalizarPage = () => {
   const dispatch = useDispatch();
   let params = useParams();
   const servicios = useSelector((state) => state.servicio.currentService);
+  console.log(servicios);
   const currentUser = useSelector((state) => state.auth.currentUser);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(getServicesByUser(null, '6260d2ec5af517fd619899d8')).then(() => {
+    dispatch(getServicesByUser(currentUser._id, null)).then(() => {
       setIsLoading(false);
     });
   }, []);
@@ -47,13 +47,21 @@ const FinalizarPage = () => {
       month < 10 ? `0${month}` : `${month}`
     }${separator}${date}`;
   }
-
-  const onSubmit = (detalle, obsevacion) => {
+  console.log(params);
+  const onSubmit = (
+    numeroPracticas,
+    descripcion,
+    detalle,
+    numeroRepeticiones,
+  ) => {
     const payload = {
-      idServicio: params.id,
+      numeroRepeticiones: numeroRepeticiones,
+      idVocabulary: params.id,
+      descripcion: descripcion,
       detalle: detalle,
-      observacion: obsevacion,
+      numeroPracticas: numeroPracticas + 1,
       idCorePersona: currentUser._id,
+      aprendido: numeroPracticas + 1 === numeroRepeticiones ? true : false,
       idEstadoServicio: '62425882b46db72a3afdb9f9',
       estado: 'A',
       fechaCreacion: getCurrentDate(),
@@ -66,13 +74,18 @@ const FinalizarPage = () => {
     });
   };
 
+  function toBase64(arr) {
+    //arr = new Uint8Array(arr) if it's an ArrayBuffer
+    return btoa(
+      arr.reduce((data, byte) => data + String.fromCharCode(byte), ''),
+    );
+  }
+
   return (
     <>
       <MContainer>
         <div className="flex items-center justify-between">
-          <h3 className="text-primary font-semibold text-lg">
-            Finalizar Solicitud
-          </h3>
+          <h3 className="text-primary font-semibold text-lg">Practicar</h3>
         </div>
       </MContainer>
       <MContainer>
@@ -81,65 +94,56 @@ const FinalizarPage = () => {
             <div className="text-center">Loading...</div>
           ) : (
             servicios
-              .filter((servicio) => servicio._id === params.id)
+              .filter((servicio) => servicio.servicio._id === params.id)
               .map((servicio) => (
-                <MBox className="p-4 rounded-lg bg-white">
+                <MBox
+                  key={servicio.servicio._id}
+                  className="p-4 rounded-lg bg-white">
                   <h3 className="font-semibold text-lg">Fecha</h3>
                   <div className="text-sm">
                     {new Intl.DateTimeFormat('en-US').format(
-                      new Date(servicio.createdAt),
+                      new Date(servicio.servicio.createdAt),
                     )}
                   </div>
-                  <h3 className="font-semibold text-lg">Cliente</h3>
-                  <span className="text-lg">
-                    {currentUser.nombre +
-                      ' ' +
-                      currentUser.apellidoPaterno +
-                      ' ' +
-                      currentUser.apellidoMaterno}
-                  </span>
-                  <div>
-                    <MInput
-                      label="Detalle"
-                      name="detalle"
-                      register={register}
-                      value={servicio.detalle}
-                      error={errors.detalle?.message}
-                    />
-                    <MInput
-                      label="Observación"
-                      name="observacion"
-                      register={register}
-                      value={servicio.observacion}
-                      error={errors.observacion?.message}
-                    />
+                  <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold text-lg">
-                        Proveedor de Servicio:
-                      </h3>
-                      <span className="text-lg">
-                        {servicio.proveedor !== undefined
-                          ? servicio.proveedor.nombre +
-                            ' ' +
-                            servicio.proveedor.apellidoPaterno +
-                            ' ' +
-                            servicio.proveedor.apellidoMaterno
-                          : ''}
-                      </span>
-                      <h3 className="font-semibold text-lg">Dirección:</h3>
-                      <span className="text-lg">
-                        {`${servicio.direccion.tipoCalle} ${servicio.direccion.nombreCalle} ${servicio.direccion.numeroCalle} - ${servicio.direccion.distrito} - ${servicio.direccion.provincia} - ${servicio.direccion.departamento}`}
-                      </span>
+                      <h3 className="font-semibold">Palabra</h3>
+                      <span className="">{servicio.servicio.descripcion}</span>
+                      <h3 className="font-semibold">Oracion:</h3>
+                      <span className="">{`${servicio.servicio.detalle}`}</span>
+                      <h3 className="font-semibold">Meta Practicas:</h3>
+                      <span className="">{`${servicio.servicio.numeroRepeticiones}`}</span>
+                      <h3 className="font-semibold">Repeticiones:</h3>
+                      <span className="">{`${servicio.servicio.numeroPracticas}`}</span>
                     </div>
-                    <Abutton
-                      onClick={() =>
-                        onSubmit(servicio.detalle, servicio.observacion)
-                      }
-                      className="!justify-start bg-red text-red-800">
-                      <span className="flex-1 whitespace-nowrap">
-                        Finalizar Solicitud
-                      </span>
-                    </Abutton>
+                    <div>
+                      <img
+                        width="60%"
+                        alt="imagen"
+                        src={
+                          servicio.detalle !== undefined
+                            ? `data:image/png;base64,${toBase64(
+                                servicio.detalle.rutaImg.data,
+                              )}`
+                            : ''
+                        }></img>
+                    </div>
+                    <div>
+                      <Abutton
+                        onClick={() =>
+                          onSubmit(
+                            servicio.servicio.numeroPracticas,
+                            servicio.servicio.descripcion,
+                            servicio.servicio.detalle,
+                            servicio.servicio.numeroRepeticiones,
+                          )
+                        }
+                        className="!justify-start bg-red text-red-800 btnPracticar">
+                        <span className="flex-1 whitespace-nowrap">
+                          Practicar
+                        </span>
+                      </Abutton>
+                    </div>
                   </div>
                 </MBox>
               ))

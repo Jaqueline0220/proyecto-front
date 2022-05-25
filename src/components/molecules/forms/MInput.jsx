@@ -7,15 +7,16 @@ export const MInput = ({
   register,
   error,
   className,
+  className2,
   mostrarlabel,
   ...props
 }) => (
-  <div className={`${className}`}>
+  <div>
     <ALabel htmlFor={name}>{mostrarlabel ? label : ' '}</ALabel>
     <input
       type="text"
       id={name}
-      className={`${className}`}
+      className={`${mostrarlabel ? className : className2}`}
       placeholder={label}
       aria-describedby={error ? `${label}-error` : undefined}
       {...register(name)}

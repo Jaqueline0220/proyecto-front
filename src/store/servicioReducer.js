@@ -30,6 +30,22 @@ export const updateService = (payload) => async (dispatch) => {
       type: actions.UPDATE_SERVICE,
       payload: { currentService },
     });
+    toast.success('Solicitud de servicio actualizada exitosamente', {
+      theme: 'colored',
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const listarDetalle = (idVocabulary) => async (dispatch) => {
+  try {
+    const [currentService] = await servicioServices.listarDetalle(idVocabulary);
+
+    dispatch({
+      type: actions.GET_VOCABULARYDETAILL_BY_ID,
+      payload: { currentService },
+    });
   } catch (error) {
     console.log(error);
   }
@@ -40,7 +56,6 @@ export const getServicesByUser =
     try {
       const [currentService] = await servicioServices.getServicesByUser(
         idCorePersona,
-        idEstadoServicio,
       );
       dispatch({
         type: actions.GET_SERVICES_BY_USER,
@@ -61,6 +76,10 @@ const handlers = {
     currentService,
   }),
   [actions.UPDATE_SERVICE]: (state, { currentService }) => ({
+    ...state,
+    currentService,
+  }),
+  [actions.GET_VOCABULARYDETAILL_BY_ID]: (state, { currentService }) => ({
     ...state,
     currentService,
   }),

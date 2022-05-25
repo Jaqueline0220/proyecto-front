@@ -18,27 +18,12 @@ const CreateServicio = () => {
   const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const imageMimeType = /image\/(png|jpg|jpeg)/i;
   const schema = object({
+    descripcion: string().required('Descripcion es requerido'),
     detalle: string().required('Detalle es requerido'),
-    observacion: string().required('Observación es requerido'),
-    monto: number().required('Monto es requerido'),
-    idDireccion: string().required('Dirección es requerida'),
+    numeroRepeticiones: number().required('Numero Repeticiones es requerido'),
   });
-
-  const [direcciones, setDirecciones] = useState([]);
-
-  useEffect(() => {
-    if (currentUser.direcciones) {
-      const direcciones = currentUser.direcciones.map((d) => {
-        return {
-          value: d._id,
-          label: `${d.tipoCalle} ${d.nombreCalle} ${d.numeroCalle} - ${d.distrito} - ${d.provincia} - ${d.departamento}`,
-        };
-      });
-      setDirecciones(direcciones);
-    }
-  }, []);
 
   const {
     register,
@@ -53,13 +38,12 @@ const CreateServicio = () => {
     const payload = {
       ...data,
       idCorePersona: currentUser._id,
-      idEstadoServicio: '6260d2ec5af517fd619899d8',
-      idDireccion: JSON.parse(data.idDireccion).value,
-      estado: 'A',
-      fechaCreacion: '2022-03-28T02:43:31.551Z',
-      fechaModificacion: '2022-03-28T02:43:31.551Z',
+      numeroPracticas: 0,
+      rutaImg: fileDataURL,
+      aprendido: data.aprendido,
+      fechaCreacion: '2022-05-23T02:43:31.551Z',
+      fechaModificacion: '2022-05-23T02:43:31.551Z',
       idUsuarioCreacion: 1,
-      descripcion: '',
       idUsuarioModificacion: 1,
     };
     dispatch(createService(payload)).then(() => {
@@ -69,7 +53,37 @@ const CreateServicio = () => {
     reset();
   });
 
-  console.log(currentUser.direcciones);
+  const [file, setFile] = useState(null);
+  const [fileDataURL, setFileDataURL] = useState(null);
+
+  const changeHandler = (e) => {
+    const file = e.target.files[0];
+    if (!file.type.match(imageMimeType)) {
+      alert('Imagen no valida.');
+      return;
+    }
+    setFile(file);
+  };
+  useEffect(() => {
+    let fileReader,
+      isCancel = false;
+    if (file) {
+      fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        const { result } = e.target;
+        if (result && !isCancel) {
+          setFileDataURL(result);
+        }
+      };
+      fileReader.readAsDataURL(file);
+    }
+    return () => {
+      isCancel = true;
+      if (fileReader && fileReader.readyState === 1) {
+        fileReader.abort();
+      }
+    };
+  }, [file]);
 
   return (
     <>
@@ -78,52 +92,66 @@ const CreateServicio = () => {
       </MContainer>
       <MContainer>
         <MBox className="p-4 rounded-lg bg-white">
-          {currentUser.direcciones.length > 0 ? (
-            <form onSubmit={onSubmit}>
-              <MInput
-                label="Detalle"
-                name="detalle"
-                register={register}
-                error={errors.detalle?.message}
+          <form onSubmit={onSubmit}>
+            <MInput
+              label="Descripcion"
+              name="descripcion"
+              mostrarlabel={true}
+              className="txtFormulario"
+              register={register}
+              error={errors.descripcion?.message}
+            />
+            <MInput
+              label="Detalle"
+              name="detalle"
+              className="txtFormulario"
+              mostrarlabel={true}
+              register={register}
+              error={errors.detalle?.message}
+            />
+            <MInput
+              label="Meta Practicas"
+              name="numeroRepeticiones"
+              className="txtFormulario"
+              mostrarlabel={true}
+              type="number"
+              register={register}
+              error={errors.numeroRepeticiones?.message}
+            />
+            <p>
+              <label htmlFor="image"> Cargar imagen</label>
+              <input
+                type="file"
+                id="image"
+                accept=".png, .jpg, .jpeg"
+                onChange={changeHandler}
               />
-              <MInput
-                label="Observación"
-                name="observacion"
-                register={register}
-                error={errors.observacion?.message}
-              />
-              <MInput
-                label="Monto"
-                name="monto"
-                type="number"
-                register={register}
-                error={errors.monto?.message}
-              />
-              <MSelect
-                label="Dirección"
-                name="idDireccion"
-                options={direcciones}
-                labelKey="label"
-                register={register}
-                error={errors.idDireccion?.message}
-              />
-              <Abutton type="submit">Crear solicitud</Abutton>
-            </form>
-          ) : (
-            <div>
-              <p className="mb-4">
-                Por favor agregue una dirección para poder solicitar un servicio{' '}
-                <span className="text-2xl">😢</span>
-              </p>
-              <div className="flex justify-center">
-                <Abutton
-                  onClick={() => navigate('/profile/addresses')}
-                  className="w-48">
-                  Agregar Dirección
-                </Abutton>
+            </p>
+            {fileDataURL ? (
+              <div className="img-preview-wrapper">
+                {<img width="50%" src={fileDataURL} alt="preview" />}
               </div>
-            </div>
-          )}
+            ) : null}
+            <MSelect
+              label="Aprendido"
+              name="aprendido"
+              options={[
+                {
+                  value: false,
+                  label: 'No',
+                },
+                {
+                  value: true,
+                  label: 'Si',
+                },
+              ]}
+              labelKey="label"
+              register={register}
+            />
+            <Abutton type="submit" className="px-3 py-1 rounded">
+              Crear Palabra
+            </Abutton>
+          </form>
         </MBox>
       </MContainer>
     </>

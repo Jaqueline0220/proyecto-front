@@ -56,6 +56,7 @@ export const CardRegister = ({ setToggleAuth }) => {
         fechaModificacion: '2022-03-07T06:30:27.128Z',
         idUsuarioCreacion: 1,
         idUsuarioModificacion: 1,
+        direccion: 'direccion prueba',
       };
       dispatch(authRegister(Object.assign(data, sample)));
       reset();
@@ -75,6 +76,8 @@ export const CardRegister = ({ setToggleAuth }) => {
           <MInput
             label="Usuario"
             name="usuario"
+            mostrarlabel={true}
+            className="txtFormulario"
             autoComplete="off"
             register={register}
             error={errors.usuario?.message}
@@ -82,6 +85,8 @@ export const CardRegister = ({ setToggleAuth }) => {
           <MInput
             label="Nombres"
             name="nombre"
+            mostrarlabel={true}
+            className="txtFormulario"
             register={register}
             error={errors.nombre?.message}
           />
@@ -89,12 +94,16 @@ export const CardRegister = ({ setToggleAuth }) => {
             <MInput
               label="Apellido Paterno"
               name="apellidoPaterno"
+              mostrarlabel={true}
+              className="txtFormulario"
               register={register}
               error={errors.apellidoPaterno?.message}
             />
             <MInput
               label="Apellido Materno"
               name="apellidoMaterno"
+              mostrarlabel={true}
+              className="txtFormulario"
               register={register}
               error={errors.apellidoMaterno?.message}
             />
@@ -103,6 +112,8 @@ export const CardRegister = ({ setToggleAuth }) => {
             label="Correo Electronico"
             name="correo"
             type="email"
+            mostrarlabel={true}
+            className="txtFormulario"
             register={register}
             error={errors.correo?.message}
           />
@@ -112,11 +123,15 @@ export const CardRegister = ({ setToggleAuth }) => {
             label="Celular"
             name="celular"
             register={register}
+            mostrarlabel={true}
+            className="txtFormulario"
             error={errors.celular?.message}
           />
           <MInput
             label="N° de Documento"
             name="nroDocumento"
+            mostrarlabel={true}
+            className="txtFormulario"
             autoComplete="off"
             register={register}
             error={errors.nroDocumento?.message}
@@ -126,6 +141,8 @@ export const CardRegister = ({ setToggleAuth }) => {
             name="contrasenia"
             type="password"
             autoComplete="off"
+            mostrarlabel={true}
+            className="txtFormulario"
             register={register}
             error={errors.contrasenia?.message}
           />
@@ -133,6 +150,8 @@ export const CardRegister = ({ setToggleAuth }) => {
             label="Verificar Contraseña"
             name="contraseniaConfirm"
             type="password"
+            mostrarlabel={true}
+            className="txtFormulario"
             autoComplete="off"
             register={register}
             error={errors.contraseniaConfirm?.message}

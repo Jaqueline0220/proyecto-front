@@ -15,7 +15,7 @@ export const authLogin = async (payload) => {
 
 export const authRegister = async (payload) => {
   try {
-    const { data } = await httpClient.post('auth/signup', payload, {
+    const { data } = await httpClient.post('auth/corePersona', payload, {
       headers: {
         'Content-Type': 'application/json',
       },

@@ -45,6 +45,7 @@ export const CardLogin = ({ setToggleAuth }) => {
             register={register}
             mostrarlabel={false}
             className="fadeIn second"
+            className2="txtUsuario"
             error={errors.usuario?.message}
           />
           <MInput

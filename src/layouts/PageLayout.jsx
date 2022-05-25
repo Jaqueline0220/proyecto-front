@@ -28,9 +28,9 @@ export const PageLayout = ({ children }) => {
         </div>
       ) : (
         <>
-          <div className="h-full grid grid-cols-[auto_1fr]">
+          <div className="h-full grid grid-cols-[auto_1fr] contenedorFinal">
             <OSidebar />
-            <div className="grid grid-rows-[80px_1fr]">
+            <div className="grid grid-rows-[80px_1fr] contenedorFinal">
               <header className="bg-white flex items-center p-6">
                 <h2 className="text-2xl font-bold">
                   Bienvenido, {currentUser?.nombre}{' '}

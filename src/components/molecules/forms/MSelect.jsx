@@ -21,7 +21,7 @@ export const MSelect = ({
       {...register(name)}
       {...props}>
       {options.map((option, index) => (
-        <option key={index} value={labelKey ? JSON.stringify(option) : option}>
+        <option key={index} value={option.value}>
           {labelKey ? option[labelKey] : option}
         </option>
       ))}

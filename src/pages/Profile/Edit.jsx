@@ -26,8 +26,8 @@ export default function EditProfile() {
   });
 
   const roles = [
-    { id: '6260d2165af517fd619899d1', name: 'GENERAL' },
-    { id: '6260d2395af517fd619899d5', name: 'PROVEEDOR' },
+    { id: '6260d2165af517fd619899d1', name: 'ADMIN' },
+    { id: '6260d2395af517fd619899d5', name: 'USUARIO' },
   ];
 
   const {
@@ -43,9 +43,6 @@ export default function EditProfile() {
       correo: currentUser.correo,
       celular: currentUser.celular,
       nroDocumento: currentUser.nroDocumento,
-      idRol: JSON.stringify(
-        roles.find((role) => role.id === currentUser.idRol),
-      ),
     },
   });
 
@@ -54,7 +51,6 @@ export default function EditProfile() {
       updateUser(
         {
           ...data,
-          idRol: JSON.parse(data.idRol).id,
         },
         currentUser._id,
       ),
@@ -67,13 +63,11 @@ export default function EditProfile() {
     <>
       <MContainer>
         <div className="flex items-center justify-between">
-          <h3 className="text-primary font-semibold text-lg">
-            Mi Perfil / Añadir dirección
-          </h3>
+          <h3 className="text-primary font-semibold text-lg">Mi Perfil</h3>
           <button
             className=" bg-primary text-white px-3 py-1 rounded"
             onClick={onSubmit}>
-            Guardar dirección
+            Guardar
           </button>
         </div>
       </MContainer>
@@ -81,37 +75,48 @@ export default function EditProfile() {
         <form onSubmit={onSubmit}>
           <MBox className="grid bg-white p-4">
             <MInput
+              mostrarlabel={true}
               label="Nombre"
+              className="txtFormulario"
               name="nombre"
               register={register}
               error={errors.nombre?.message}
             />
             <MInput
+              mostrarlabel={true}
               label="Apellido paterno"
               name="apellidoPaterno"
+              className="txtFormulario"
               register={register}
               error={errors.apellidoPaterno?.message}
             />
             <MInput
+              mostrarlabel={true}
               label="Apellido materno"
+              className="txtFormulario"
               name="apellidoMaterno"
               register={register}
               error={errors.apellidoMaterno?.message}
             />
             <MInput
+              mostrarlabel={true}
               label="Correo"
               name="correo"
+              className="txtFormulario"
               register={register}
               error={errors.correo?.message}
             />
             <MInput
+              mostrarlabel={true}
               label="Celular"
               name="celular"
               type="number"
+              className="txtFormulario"
               register={register}
               error={errors.celular?.message}
             />
             <MInput
+              mostrarlabel={true}
               label="Nro de documento"
               name="nroDocumento"
               type="number"
@@ -119,6 +124,7 @@ export default function EditProfile() {
               error={errors.nroDocumento?.message}
             />
             <MSelect
+              mostrarlabel={true}
               label="Roles"
               name="idRol"
               options={roles}

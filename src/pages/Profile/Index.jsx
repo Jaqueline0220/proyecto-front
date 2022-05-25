@@ -77,23 +77,6 @@ export default () => {
           <MTable columns={columns} isShowHeader={false} data={dataProfile} />
         </MBox>
       </MContainer>
-      <MContainer>
-        <div className="flex justify-between items-end">
-          <h4 className="text-black font-medium">Direcciones</h4>
-          <ARouterLink
-            to="/profile/addresses"
-            className="bg-secondary rounded-md text-blue-800 px-2">
-            Añadir nueva direccion
-          </ARouterLink>
-        </div>
-        <MBox className="bg-white border-2 border-secondary-100 mt-2">
-          <MTable
-            columns={columnsAddress}
-            isShowHeader={true}
-            data={dataAddress}
-          />
-        </MBox>
-      </MContainer>
     </>
   );
 };

@@ -6,8 +6,32 @@
   background-color: #8bb0e8 !important;
 }
 
+.btnPracticar{
+  padding: 10px;
+  color: #0d0d0d;
+}
+
 .iconoCerrar{
   position: absolute;
+}
+
+.img-preview-wrapper{
+  width: 30%;
+  margin: 0 auto;
+}
+
+.txtFormulario{
+  background-color: #f6f6f6;
+  border: none;
+  color: #0d0d0d;
+  padding: 5px 10px;
+  width: 100%;
+  border: 2px solid #f6f6f6;
+  border-radius: 5px 5px 5px 5px;
+}
+
+.contenedorFinal{
+  background-color: #d3f2d8;
 }
 
 @tailwind base;

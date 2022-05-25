@@ -12,9 +12,15 @@ const HomePage = () => {
   const dispatch = useDispatch();
 
   const servicios = useSelector((state) => state.servicio.currentService);
+  console.log(servicios);
   const currentUser = useSelector((state) => state.auth.currentUser);
   const [isLoading, setIsLoading] = useState(true);
-
+  function toBase64(arr) {
+    //arr = new Uint8Array(arr) if it's an ArrayBuffer
+    return btoa(
+      arr.reduce((data, byte) => data + String.fromCharCode(byte), ''),
+    );
+  }
   useEffect(() => {
     dispatch(getServicesByUser(currentUser._id)).then(() => {
       setIsLoading(false);
@@ -23,7 +29,7 @@ const HomePage = () => {
 
   const estados = {
     '62425882b46db72a3afdb9f9': 'Pendiente',
-    '6260d2ec5af517fd619899d8': 'Practicado',
+    '6260d2ec5af517fd619899d8': 'Aprendida',
     '6260d2fd5af517fd619899da': 'Proceso',
   };
   return (
@@ -51,46 +57,56 @@ const HomePage = () => {
             </div>
           ) : (
             servicios.map((servicio) => (
-              <MBox key={servicio._id} className="bg-white p-4">
+              <MBox key={servicio.servicio._id} className="bg-white p-4">
                 <div className="text-xs">
                   {new Intl.DateTimeFormat('en-US').format(
-                    new Date(servicio.createdAt),
+                    new Date(servicio.servicio.createdAt),
                   )}{' '}
                   <span className="bg-secondary py-1 rounded-full text-sm px-2 font-bold">
-                    {servicio.Aprendido
+                    {servicio.servicio.aprendido
                       ? estados['6260d2ec5af517fd619899d8']
                       : estados['62425882b46db72a3afdb9f9']}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-lg">
-                      {servicio.detalle}
+                    <h3 className="font-semibold">
+                      {servicio.servicio.descripcion}
                     </h3>
-                    <span className="text-lg">{servicio.observacion}</span>
-                    <h3 className="font-semibold text-lg">Palabra:</h3>
+                    <h3 className="font-semibold">Oracion:</h3>
                     <span className="text-lg">
-                      {servicio !== undefined
-                        ? servicio.descripcion +
-                          ' ' +
-                          servicio.detalle +
-                          ' ' +
-                          servicio.observacion
+                      {servicio.servicio !== undefined
+                        ? servicio.servicio.detalle
                         : ''}
                     </span>
-                    <h3 className="font-semibold text-lg">Practicas:</h3>
-                    <span className="text-lg">{`${servicio.numeroRepeticiones}`}</span>
+                    <h3 className="font-semibold">Meta Practicas:</h3>
+                    <span className="">{`${servicio.servicio.numeroRepeticiones}`}</span>
+                    <h3 className="font-semibold">Repeticiones:</h3>
+                    <span className="">{`${servicio.servicio.numeroPracticas}`}</span>
+                  </div>
+                  <div>
+                    <img
+                      width="50%"
+                      alt="imagen"
+                      src={
+                        servicio.detalle !== undefined
+                          ? `data:image/png;base64,${toBase64(
+                              servicio.detalle.rutaImg.data,
+                            )}`
+                          : ''
+                      }></img>
                   </div>
                   <div className="flex items-center">
-                    {servicio.idEstadoServicio !==
-                      '62425882b46db72a3afdb9f9' && (
+                    {!servicio.servicio.aprendido && (
                       <Abutton
                         onClick={() => {
-                          navigate('/servicio/finalizar/' + servicio._id);
+                          navigate(
+                            '/servicio/finalizar/' + servicio.servicio._id,
+                          );
                         }}
-                        className="!justify-start bg-red text-red-800">
+                        className="btnPracticar">
                         <span className="flex-1 whitespace-nowrap">
-                          Finalizar Solicitud
+                          Practicar
                         </span>
                       </Abutton>
                     )}

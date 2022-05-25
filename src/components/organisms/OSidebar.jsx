@@ -56,12 +56,12 @@ export const OSidebar = () => {
       path: '/profile',
       can: ['ADMIN', 'GENERAL', 'PROVEEDOR'],
     },
-    {
+    /*{
       name: 'Palabras',
       icon: ReceiptTaxIcon,
       path: '/servicio/abiertos',
       can: ['ADMIN', 'PROVEEDOR'],
-    },
+    },*/
   ];
 
   const filterPages = pages.filter((pages) =>
